@@ -4,6 +4,7 @@ import com.application.clasementAPI.entities.Teams;
 import com.application.clasementAPI.helpers.MessageModel;
 import com.application.clasementAPI.pojos.ListTeams;
 import com.application.clasementAPI.pojos.Pagination;
+import com.application.clasementAPI.pojos.TeamStore;
 import com.application.clasementAPI.repositories.TeamsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -67,6 +68,24 @@ public class TeamService {
                     null,
                     team
             );
+
+            return ResponseEntity.ok().body(response);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+        }
+    }
+
+    public ResponseEntity addTeam(TeamStore payload) {
+        try {
+            Teams team = new Teams();
+            team.setTeamName(payload.getTeamName());
+            team.setCity(payload.getCity());
+            teamsRepository.save(team);
+
+            response.setStatus(true);
+            response.setMessage("Berhasil menyimpan data");
+            response.setPagination(null);
+            response.setData(null);
 
             return ResponseEntity.ok().body(response);
         }catch (Exception e) {
